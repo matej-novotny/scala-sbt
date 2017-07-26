@@ -1,33 +1,34 @@
-#
-# Scala and sbt Dockerfile
-#
-# https://github.com/hseeberger/scala-sbt
-#
+# Docker file for building an Ubuntu image with Oracle JDK 8 and Scala.
+FROM ubuntu:17.04
 
-# Pull base image
-FROM  openjdk:8u131-jdk
+ARG SCALA_VERSION=2.11.8
+ARG SBT_VERSION=0.13.15
 
-ENV SCALA_VERSION 2.11.8
-ENV SBT_VERSION 0.13.15
+RUN apt-get update
 
-# Scala expects this file
-RUN touch /usr/lib/jvm/java-8-openjdk-amd64/release
+# Installs postgresql
+RUN apt-get install -y postgresql-9.6
+RUN apt-get install -y postgresql-server-dev-9.6
 
-# Install Scala
-## Piping curl directly in tar
+# Installs Java 8
+RUN apt-get -y install software-properties-common python-software-properties
+RUN add-apt-repository ppa:webupd8team/java && apt-get update
+RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+RUN apt-get -y install oracle-java8-installer oracle-java8-set-default libjansi-java
+
+#Installs Maven
+RUN apt-get -y install maven
+
+# Installs Scala and SBT
 RUN \
-  curl -fsL https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C /root/ && \
-  echo >> /root/.bashrc && \
-  echo 'export PATH=~/scala-$SCALA_VERSION/bin:$PATH' >> /root/.bashrc
+        DEBIAN_FRONTEND=noninteractive \
+                cd /tmp && \
+                wget -nv http://www.scala-lang.org/files/archive/scala-$SCALA_VERSION.deb && \
+                wget -nv https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
+                dpkg -i scala-*.deb && \
+                dpkg -i sbt-$SBT_VERSION.deb && \
+                rm -f scala-*.deb && \
+                rm -f sbt-*.deb
 
-# Install sbt
-RUN \
-  curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
-  dpkg -i sbt-$SBT_VERSION.deb && \
-  rm sbt-$SBT_VERSION.deb && \
-  apt-get update && \
-  apt-get install sbt && \
-  sbt sbtVersion
-
-# Define working directory
-WORKDIR /root
+# Clenup
+RUN apt-get autoremove && apt-get clean
