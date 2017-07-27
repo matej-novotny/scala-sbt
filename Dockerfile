@@ -32,3 +32,7 @@ RUN \
 
 # Clenup
 RUN apt-get autoremove && apt-get clean
+
+# Allow user
+RUN useradd -m testing
+USER testing
