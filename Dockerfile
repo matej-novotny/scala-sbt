@@ -35,4 +35,5 @@ RUN apt-get autoremove && apt-get clean
 
 # Allow user
 RUN useradd -m testing
+RUN usermod -a -G postgres testing
 USER testing
