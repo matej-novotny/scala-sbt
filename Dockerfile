@@ -29,5 +29,14 @@ RUN \
   apt-get install sbt && \
   sbt sbtVersion
 
+# install aws utils
+RUN apt-get update && apt-get install -y \
+    python \
+    python-pip \
+    zip \
+  && pip install boto3==1.3.0 \
+  && apt-get remove --auto-remove python-pip -y \
+  && rm -rf /var/lib/apt/lists/*
+
 # Define working directory
 WORKDIR /root
