@@ -38,5 +38,8 @@ RUN apt-get update && apt-get install -y \
   && apt-get remove --auto-remove python-pip -y \
   && rm -rf /var/lib/apt/lists/*
 
+# install npm and node
+RUN apt-get install nodejs npm
+
 # Define working directory
 WORKDIR /root
