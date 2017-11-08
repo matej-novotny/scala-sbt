@@ -39,7 +39,9 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 # install npm and node
-RUN apt-get install nodejs npm
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash \
+  && apt-get update && apt-get install nodejs -y \
+  && rm -rf /var/lib/apt/lists/*
 
 # Define working directory
 WORKDIR /root
