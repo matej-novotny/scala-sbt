@@ -39,9 +39,9 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 # install npm and node
-RUN curl -sL https://deb.nodesource.com/setup_7.x | bash \
-  && apt-get update && apt-get install nodejs -y \
-  && rm -rf /var/lib/apt/lists/*
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash \
+  && source ~/.bashrc \
+  && nvm install 7.9
 
 # Define working directory
 WORKDIR /root
