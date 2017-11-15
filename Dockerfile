@@ -40,8 +40,7 @@ RUN apt-get update && apt-get install -y \
 
 # install npm and node
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash \
-  && source ~/.bashrc \
-  && nvm install 7.9
+  && /bin/bash -c "source ~/.bashrc && nvm install 7.9"
 
 # Define working directory
 WORKDIR /root
