@@ -33,9 +33,12 @@ RUN \
 
 RUN echo 'deb http://ftp.de.debian.org/debian testing main' >> /etc/apt/sources.list
 RUN echo 'APT::Default-Release "stable";' | tee -a /etc/apt/apt.conf.d/00local
-RUN apt-get update && apt-get -y -t testing install python3.6
+RUN apt-get update && apt-get -y -t testing install python3.6 python3.6-tk
 RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
 
 # -------------------------------------------------- Define working directory
+
+ENV MATPLOTLIBRC="/root"
+RUN echo "backend      : Agg" >> $MATPLOTLIBRC/matplotlibrc
 
 WORKDIR /root
