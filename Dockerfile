@@ -41,4 +41,12 @@ RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
 ENV MATPLOTLIBRC="/root"
 RUN echo "backend      : Agg" >> $MATPLOTLIBRC/matplotlibrc
 
+# -------------------------------------------------- Preinstall some misbehaved libraries
+
+RUN apt-get -y -t testing install python3.6-numpy libdpkg-perl cython3-dbg
+RUN python3.6 -m pip install tslearn
+
+RUN apt-get -y clean
+RUN apt-get -y autoremove
+
 WORKDIR /root
