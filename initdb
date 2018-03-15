@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+ARGS="$@"
+su postgres -c "cd; $(find /usr -name initdb | head -n 1) $ARGS"
+

@@ -18,9 +18,16 @@ RUN touch /usr/lib/jvm/java-8-openjdk-amd64/release
 RUN \
   curl -fsL https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C /root/ && \
   echo >> /root/.bashrc && \
-  echo 'export PATH=~/scala-$SCALA_VERSION/bin:$PATH' >> /root/.bashrc
+  echo 'export PATH=~/scala-$SCALA_VERSION/bin:~/bin:$PATH' >> /root/.bashrc
+
+# -------------------------------------------------- Add debian testing repository
+
+RUN echo 'deb http://ftp.de.debian.org/debian testing main' >> /etc/apt/sources.list
+RUN echo 'APT::Default-Release "stable";' | tee -a /etc/apt/apt.conf.d/00local
+RUN apt-get update
 
 # -------------------------------------------------- Install sbt
+
 RUN \
   curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
   dpkg -i sbt-$SBT_VERSION.deb && \
@@ -29,31 +36,30 @@ RUN \
   apt-get install sbt && \
   sbt sbtVersion
 
-# -------------------------------------------------- Install python3
-
-RUN echo 'deb http://ftp.de.debian.org/debian testing main' >> /etc/apt/sources.list
-RUN echo 'APT::Default-Release "stable";' | tee -a /etc/apt/apt.conf.d/00local
-RUN apt-get update && apt-get -y -t testing install python3.6 python3.6-tk
-RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
-
-# -------------------------------------------------- Define working directory
-
-ENV MATPLOTLIBRC="/root"
-RUN echo "backend      : Agg" >> $MATPLOTLIBRC/matplotlibrc
-
-# -------------------------------------------------- Preinstall some misbehaved libraries
-
-RUN apt-get -y -t testing install python3.6-numpy libdpkg-perl cython3-dbg
-RUN python3.6 -m pip install tslearn
-
 # -------------------------------------------------- Postgres for testing
 
-RUN apt-get update
-RUN apt-get -y -t testing install postgresql
+RUN apt-get -y -t testing install \
+	postgresql \
+	python3.6 \
+	python3.6-tk \
+	python3.6-venv \
+	python3.6-numpy \
+	libdpkg-perl \
+	cython3-dbg
+
+RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
 
 # -------------------------------------------------- Clean up and stuff
 
 RUN apt-get -y clean
 RUN apt-get -y autoremove
 
-WORKDIR /root
+# -------------------------------------------------- Define working directory
+
+ENV MATPLOTLIBRC="/root"
+RUN echo "backend      : Agg" >> $MATPLOTLIBRC/matplotlibrc
+
+COPY initdb /root/bin/
+COPY postgres /root/bin/
+
+WORKDIR "/root"
