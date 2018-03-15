@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 ARGS="$@"
-su postgres -c "cd; $(find /usr -name initdb | head -n 1) $ARGS"
 
+DATA_FOLDER=`parse_datafolder $ARGS`
+
+[[ ! -z "$DATA_FOLDER" ]] && chown postgres:postgres $DATA_FOLDER
+
+su postgres -c "cd; $(find /usr -name initdb | head -n 1) $ARGS"
