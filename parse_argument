@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+import sys
+
+separator = sys.argv[-1]
+
+try:
+    arr = [w for a in sys.argv[:-1] for w in a.split() if w]
+    index = arr.index(separator)
+
+    sys.stdout.write(arr[index + 1])
+except:
+    pass
+finally:
+    sys.stdout.flush()

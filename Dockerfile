@@ -61,6 +61,6 @@ RUN echo "backend      : Agg" >> $MATPLOTLIBRC/matplotlibrc
 
 COPY initdb /root/bin/
 COPY postgres /root/bin/
-COPY parse_datafolder /root/bin/
+COPY parse_argument /root/bin/
 
 WORKDIR "/root"

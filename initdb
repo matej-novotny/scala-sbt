@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ARGS="$@"
 
-DATA_FOLDER=`parse_datafolder $ARGS`
+DATA_FOLDER=`parse_argument $ARGS -D`
 
 [[ ! -z "$DATA_FOLDER" ]] && chown postgres:postgres $DATA_FOLDER
 
