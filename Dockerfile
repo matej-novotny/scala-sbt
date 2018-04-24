@@ -38,16 +38,19 @@ RUN \
 
 # -------------------------------------------------- Postgres for testing
 
+RUN apt-get -y -t testing install postgresql
+RUN apt-get -y -t testing install gcc
 RUN apt-get -y -t testing install \
-	postgresql \
+	libdpkg-perl \
 	python3.6 \
 	python3.6-tk \
 	python3.6-venv \
 	python3.6-numpy \
-	libdpkg-perl \
-	cython3-dbg
+    python3.6-dev
 
 RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
+
+RUN pip3 install Cython==0.28.1
 
 # -------------------------------------------------- Clean up and stuff
 
