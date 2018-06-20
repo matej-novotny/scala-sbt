@@ -11,7 +11,8 @@ ENV SCALA_VERSION 2.11.11
 ENV SBT_VERSION 0.13.16
 
 # -------------------------------------------------- Scala expects this file
-RUN touch /usr/lib/jvm/java-8-openjdk-amd64/release
+# RUN touch /usr/lib/jvm/java-8-openjdk-amd64/release
+RUN apt-get -y update && apt-get -y install curl
 
 # -------------------------------------------------- Install Scala
 ## Piping curl directly in tar
@@ -47,6 +48,8 @@ RUN apt-get -y -t testing install \
 	python3.6-venv \
 	python3.6-numpy \
     python3.6-dev
+
+RUN apt-get -y -t testing install python3-distutils
 
 RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
 
