@@ -5,7 +5,7 @@
 #
 
 # -------------------------------------------------- Pull base image
-FROM  openjdk:8-jdk
+FROM vletal/graalvm-docker:latest
 
 ENV SCALA_VERSION 2.11.11
 ENV SBT_VERSION 0.13.16

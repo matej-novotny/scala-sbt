@@ -5,7 +5,7 @@ This repository contains **Dockerfile** of [Scala](http://www.scala-lang.org) an
 
 ## Base Docker Image ##
 
-* [openjdk](https://hub.docker.com/_/openjdk)
+* [graalvm](https://hub.docker.com/r/vletal/graalvm-docker/)
 
 
 ## Installation ##
